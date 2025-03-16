@@ -65,6 +65,9 @@ export class Clipper extends BaseClipper {
 
   async #init() {
     await write(this.#tmpFile, this.source.stream());
+
+    let delta = -1;
+
     const demuxer = new Mp4Demuxer(
       this.#tmpFile,
       (mp4boxFile, info) => {
@@ -72,9 +75,16 @@ export class Clipper extends BaseClipper {
       },
       (_, sampleType, samples) => {
         if (sampleType === "video") {
+          if (delta === -1) {
+            delta = samples[0].dts;
+          }
           samples.forEach((sample) => {
             this.#videoSample.push({
               ...sample,
+              cts: ((sample.cts - delta) / sample.timescale) * 1e6,
+              dts: ((sample.dts - delta) / sample.timescale) * 1e6,
+              duration: (sample.duration / sample.timescale) * 1e6,
+              timescale: 1e6,
               data: null,
             });
           });

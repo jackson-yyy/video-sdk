@@ -112,7 +112,7 @@ export class Mp4Demuxer {
       const videoTrackId = info.videoTracks[0]?.id;
       if (videoTrackId !== undefined || videoTrackId !== null) {
         this.mp4boxFile.setExtractionOptions(videoTrackId, "video", {
-          nbSamples: 100,
+          nbSamples: 1000,
         });
       }
 

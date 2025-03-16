@@ -6,7 +6,7 @@ import { Clipper, ClipperFFmpeg } from "@oops-av/clipper";
 
 const isWebCodecs = ref(false);
 
-const frames = ref<string[]>([]);
+const frames = ref<ThumbnailsResult>([]);
 
 const handleChange = async (options: { fileList: UploadFileInfo[] }) => {
   const file = options.fileList[0];
@@ -15,9 +15,10 @@ const handleChange = async (options: { fileList: UploadFileInfo[] }) => {
   const clipper = isWebCodecs.value
     ? new Clipper(file.file)
     : new ClipperFFmpeg(file.file);
-  frames.value = (await clipper.thumbnails()).map((blob) =>
-    URL.createObjectURL(blob.blob)
-  );
+  frames.value = (await clipper.thumbnails()).map((item) => ({
+    blob: URL.createObjectURL(item.blob),
+    time: (item.timestamp / 1e6).toFixed(3),
+  }));
   console.log("耗时", performance.now() - start);
 };
 </script>
@@ -36,7 +37,8 @@ const handleChange = async (options: { fileList: UploadFileInfo[] }) => {
   <div v-if="frames.length" style="display: flex; flex-wrap: wrap">
     {{ frames.length }} 张图片
     <div v-for="frame in frames" :key="frame">
-      <img width="100" object-fit="cover" :src="frame" />
+      <img width="100" object-fit="cover" :src="frame.blob" />
+      {{ frame.time }}
     </div>
   </div>
 </template>
