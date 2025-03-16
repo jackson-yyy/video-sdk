@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ESNext", // 编译目标 JavaScript 版本
+    "module": "ESNext", // 模块系统
+    "moduleResolution": "node", // 模块解析策略
+    "strict": true, // 启用严格类型检查
+    "esModuleInterop": true, // 支持 CommonJS 和 ES 模块的互操作
+    "skipLibCheck": true, // 跳过库文件的类型检查
+    "forceConsistentCasingInFileNames": true // 强制文件名大小写一致
+  },
+  "exclude": ["node_modules"] // 排除的文件
+}

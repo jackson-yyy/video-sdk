@@ -1,0 +1,17 @@
+{
+  "name": "@oops-av/demuxer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.6.1",
+  "dependencies": {
+    "mp4box": "^0.5.3",
+    "opfs-tools": "^0.7.0"
+  }
+}
