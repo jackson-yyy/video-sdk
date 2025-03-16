@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { NButton, NUpload, type UploadFileInfo } from "naive-ui";
+import { NButton, NUpload, type UploadFileInfo, NSwitch } from "naive-ui";
 import { ref } from "vue";
 import { useWebCodecs } from "../hooks/webcodecs/useWebCodecs";
 import { Clipper, ClipperFFmpeg } from "@oops-av/clipper";
+
+const isWebCodecs = ref(false);
 
 const frames = ref<string[]>([]);
 
@@ -10,8 +12,9 @@ const handleChange = async (options: { fileList: UploadFileInfo[] }) => {
   const file = options.fileList[0];
   if (!file.file) return;
   const start = performance.now();
-  const clipper = new Clipper(file.file);
-  // const clipper = new ClipperFFmpeg(file.file);
+  const clipper = isWebCodecs.value
+    ? new Clipper(file.file)
+    : new ClipperFFmpeg(file.file);
   frames.value = (await clipper.thumbnails()).map((blob) =>
     URL.createObjectURL(blob.blob)
   );
@@ -20,6 +23,7 @@ const handleChange = async (options: { fileList: UploadFileInfo[] }) => {
 </script>
 
 <template>
+  <n-switch v-model:value="isWebCodecs">webcodecs</n-switch>
   <n-upload
     ref="upload"
     :default-upload="false"
