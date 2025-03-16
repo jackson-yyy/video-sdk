@@ -55,7 +55,7 @@ function genClipFFmpegCommand(
     "-q:v",
     String(quality * 32),
     "-threads",
-    "4",
+    "1",
     `${taskFrameDir}/frame_%09d.3f.png`
   );
   return command;
